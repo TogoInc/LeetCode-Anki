@@ -7,7 +7,12 @@
 #
 # that will do that for you.
 
+# !!!!!!!!!!!!!!!! PLEASE, back up or sync your Firefox settings before you run this!
+# If you don't you'll have a FRESH INSTALL of Firefox afterwards and will have to get
+# all your add-ons, etc back again!
+
 # MUST RUN AS SUDO.
+
 
 # Add the official Mozilla PPA.
 sudo add-apt-repository ppa:mozillateam/ppa
