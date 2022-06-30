@@ -3,6 +3,7 @@ import os.path
 import pickle
 import re
 from sys import exit
+from numpy import sort
 
 import requests
 from requests.cookies import RequestsCookieJar
@@ -77,6 +78,9 @@ class LeetCodeCrawler:
                 with open(COOKIE_PATH, 'wb') as f:
                     pickle.dump(browser_cookies, f)
                 print("🎉 Login successfully")
+                print("")
+                print("Login info will be saved for future runs of the script.")
+                print("")
 
             except Exception as e:
                 print(f"🤔 Login Failed: {e}, please try again")
@@ -96,6 +100,12 @@ class LeetCodeCrawler:
     def fetch_accepted_problems(self):
         response = self.session.get("https://leetcode.com/api/problems/all/")
         all_problems = json.loads(response.content.decode('utf-8'))
+
+        print("  Dumping problem data to data/all_problems.json...")
+        with open("data/all_problems.json", "w") as f:
+            json.dump(all_problems, f, indent=1, sort_keys=True)
+        print("  ... Complete. Check it out if you want to hack this script.")
+
         # filter AC problems
         counter = 0
         for item in all_problems['stat_status_pairs']:

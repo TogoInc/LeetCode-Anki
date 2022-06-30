@@ -1,6 +1,10 @@
-# This fork is for **Firefox** users on **Ubuntu Linux 22.04 LTS or greater**.
+# Hi! This fork uses **Firefox** on **Ubuntu 22.04**.
 
+The original implementation used Google Chrome.
 
+## Some caveats to note
+
+- This will *only* get you cards for LeetCode problems *you have already completed* on the site. You can't use this to cram problems you haven't solved yet, in other words.
 
 ## 介绍
 
