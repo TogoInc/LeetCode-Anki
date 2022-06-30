@@ -1,5 +1,6 @@
-# database
+# database and Anki files
 *.sqlite
+*.apkg
 
 # cookies
 cookies.dat
