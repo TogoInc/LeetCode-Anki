@@ -14,6 +14,12 @@ from utils import destructure, random_wait, do, get
 
 COOKIE_PATH = "./cookies.dat"
 
+import geckodriver_autoinstaller
+
+
+geckodriver_autoinstaller.install()  # Check if the current version of geckodriver exists
+                                     # and if it doesn't exist, download it automatically,
+                                     # then add geckodriver to path
 
 class LeetCodeCrawler:
     def __init__(self):
@@ -38,8 +44,21 @@ class LeetCodeCrawler:
             with open(COOKIE_PATH, 'rb') as f:
                 browser_cookies = pickle.load(f)
         else:
-            print("😎 Starting browser login..., please fill the login form")
-            browser = webdriver.Chrome(executable_path="./vendor/chromedriver")
+            print("============")
+            print("")
+            print("If you get a bug about a missing profile for Firefox,")
+            print("and you are on Ubuntu Linux, try this fix.")
+            print("")
+            print("  https://stackoverflow.com/a/72531719")
+            print("")
+            print("============")
+            print("")
+            print("😎 Starting browser login!")
+            print("Please fill the login form in your browser window.")
+            print("")
+
+            browser = webdriver.Firefox()
+
             try:
                 # browser login
                 login_url = "https://leetcode.com/accounts/login"

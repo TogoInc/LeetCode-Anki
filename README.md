@@ -1,10 +1,14 @@
+# This fork is for **Firefox** users on **Ubuntu Linux 22.04 LTS or greater**.
+
+
+
 ## 介绍
 
 在刷LeetCode的过程中时常会遇到与之前类似的题目但是却忘记解题思路的情况。[Anki](https://apps.ankiweb.net/) 是一个基于遗忘曲线的全平台记忆工具，支持Mac，Linux， Windows， iOS和Andorid平台。Anki是一个优秀的记忆工具，但是在使用需要手动制卡，这个过程非常繁琐且耗时。
 
 > Invest some time to automate or simplify a process to save more time in the future
 
-**本项目旨在抓取LeetCode已AC的题目，并自动生成Anki卡组帮助记忆。**
+**本项目旨Chrome在抓取LeetCode已AC的题目，并自动生成Anki卡组帮助记忆。**
 
 抓取的数据包括：
 

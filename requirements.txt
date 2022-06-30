@@ -4,3 +4,6 @@ peewee~=3.13.3
 genanki~=0.8.1
 markdown~=3.1.1
 python-markdown-math
+
+# Andrew's 2022 additions for Firefox.
+geckodriver-autoinstaller~=0.1.0
