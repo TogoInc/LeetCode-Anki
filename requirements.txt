@@ -1,9 +1,18 @@
-requests~=2.24.0
-selenium~=3.141.0
-peewee~=3.13.3
-genanki~=0.8.1
-markdown~=3.1.1
-python-markdown-math
-
-# Andrew's 2022 additions for Firefox.
-geckodriver-autoinstaller~=0.1.0
+-i https://pypi.org/simple
+cached-property==1.5.2
+certifi==2022.6.15
+chardet==3.0.4
+frozendict==2.3.2
+geckodriver-autoinstaller==0.1.0
+genanki==0.8.1
+idna==2.10
+markdown==3.1.1
+numpy==1.23.0
+peewee==3.13.3
+pystache==0.6.0
+python-markdown-math==0.8
+pyyaml==6.0
+requests==2.24.0
+selenium==3.141.0
+setuptools==63.1.0
+urllib3==1.25.11
