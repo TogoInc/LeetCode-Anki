@@ -1,10 +1,27 @@
 # `Leetcode-Anki`: `pipenv`'ed and Firefox port
 
+## Quickstart
+
+_On any platform, using Python_
+
+```sh
+# Get a local copy of Leetcode-Anki. Ensure you have Firefox installed.
+git clone https://github.com/hiAndrewQuinn/LeetCode-Anki.git
+git cd Leetcode-Anki
+
+# Install any pipenv dependencies fromt the Pipfile,
+pipenv install
+# then enter its virtual environment.
+pipenv shell
+
+# Run the program!
+python main.py
+```
+
 The original implementation used Google Chrome for its webdriver; this version uses Firefox.
 
 More importantly, this version has been moved onto `pipenv`. The build determinism means this **should work equally well on any OS**, so long as you actually use the `pipenv` correctly. So let's go ahead and do this.
 
-## Quickstart
 
 ## Some caveats to note
 
