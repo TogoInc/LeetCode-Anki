@@ -1,4 +1,5 @@
 # database and Anki files
+data/LeetCode.apkg
 data/*
 *.sqlite
 *.apkg

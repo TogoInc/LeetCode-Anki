@@ -11,6 +11,7 @@ genanki = "~=0.8.1"
 markdown = "~=3.1.1"
 python-markdown-math = "*"
 geckodriver-autoinstaller = "~=0.1.0"
+numpy = "*"
 
 [dev-packages]
 
