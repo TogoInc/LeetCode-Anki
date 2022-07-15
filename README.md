@@ -6,10 +6,10 @@ _On any platform, using Python_
 
 ```sh
 # Get a local copy of Leetcode-Anki. Ensure you have Firefox installed.
-git clone https://github.com/hiAndrewQuinn/LeetCode-Anki.git
-git cd Leetcode-Anki
+git clone https://github.com/hiAndrewQuinn/LeetCode-Anki.git 
+cd LeetCode-Anki
 
-# Install any pipenv dependencies fromt the Pipfile,
+# Install any pipenv dependencies from the Pipfile,
 pipenv install
 # then enter its virtual environment.
 pipenv shell

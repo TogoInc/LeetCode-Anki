@@ -161,15 +161,13 @@ class LeetCodeCrawler:
             })
         body = json.loads(resp.content)
 
-        print(json.dumps(body, indent=1, sort_keys=True))
-
         # parse data
         question = get(body, 'data.question')
 
         Problem.replace(
             id=question['questionId'],
             display_id=question['questionFrontendId'], 
-            Problemtitle=question["questionTitle"],
+            title=question["questionTitle"],
             level=question["difficulty"], 
             slug=slug, 
             description=question['content'],

@@ -12,3 +12,5 @@ worker.fetch_accepted_problems()
 
 # render anki
 render_anki()
+
+print("If all went well, you can find your LeetCode Anki flashcards ready in data/.")
