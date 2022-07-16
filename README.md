@@ -18,7 +18,10 @@ pipenv shell
 python main.py
 ```
 
-The original implementation used Google Chrome for its webdriver; this version uses Firefox.
+![image](https://user-images.githubusercontent.com/53230903/179350779-b1a0b0ea-d488-406f-9540-8f8be43e160f.png)
+
+
+The **original used Google Chrome** for its webdriver; this one **requires Firefox**.
 
 More importantly, this version has been moved onto `pipenv`. The build determinism means this **should work equally well on any OS**, so long as you actually use the `pipenv` correctly. So let's go ahead and do this.
 
