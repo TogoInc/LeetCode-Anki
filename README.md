@@ -1,4 +1,4 @@
-# `Leetcode-Anki`: `pipenv`'ed and Firefox port
+# `LeetCode-Anki`: `pipenv`'ed and Firefox port
 
 ## Quickstart
 
