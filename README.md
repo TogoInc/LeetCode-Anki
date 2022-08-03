@@ -23,7 +23,8 @@ python main.py
 
 ![Example of CLI spinners as the program runs.](https://user-images.githubusercontent.com/53230903/182570733-e5d87156-d803-45d3-8abe-3ae4b94d708a.gif)
 
-![Example of final output.](https://user-images.githubusercontent.com/53230903/179350779-b1a0b0ea-d488-406f-9540-8f8be43e160f.png)
+![Example of final output.](https://user-images.githubusercontent.com/53230903/182571899-7583a295-2747-4e16-8b0b-b6bd44604ffa.png)
+
 
 
 The **original used Google Chrome** for its webdriver; this one **requires Firefox**.
