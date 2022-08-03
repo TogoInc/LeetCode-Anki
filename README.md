@@ -31,7 +31,14 @@ The **original used Google Chrome** for its webdriver; this one **requires Firef
 More importantly, this version has been moved onto `pipenv`. The build determinism means this **should work equally well on any OS**, so long as you actually use the `pipenv` correctly. So let's go ahead and do this.
 
 
-## Some caveats to note
+## Troubleshooting
+
+If in the future you ever want to
+
+- **rebuild your deck from scratch**: Delete `data/`.
+- **reauthenticate with LeetCode**: Delete `cookies.dat`.
+
+## Caveats to note
 
 - You need to log in **on the LeetCode page itself** when prompted. Using 3rd-party authenticators like GitHub, Google, etc. **will not work**.
 - This will *only* get you cards for LeetCode problems *you have already completed* on the site. You can't use this to cram problems you haven't solved yet, in other words.
