@@ -5,6 +5,9 @@ import re
 from sys import exit
 from numpy import sort
 
+from yaspin import yaspin
+from yaspin.spinners import Spinners
+
 import requests
 from requests.cookies import RequestsCookieJar
 from selenium import webdriver
@@ -129,173 +132,199 @@ class LeetCodeCrawler:
                 do(self.fetch_submission, args=[slug])
         print(f"🤖 Updated {counter} problems")
 
+
     def fetch_problem(self, slug, accepted=False):
-        print(f"🤖 Fetching problem: https://leetcode.com/problem/{slug}/...")
-        query_params = {
-            'operationName': "getQuestionDetail",
-            'variables': {'titleSlug': slug},
-            'query': '''query getQuestionDetail($titleSlug: String!) {
-                        question(titleSlug: $titleSlug) {
-                            questionId
-                            questionFrontendId
-                            questionTitle
-                            questionTitleSlug
-                            content
-                            difficulty
-                            stats
-                            similarQuestions
-                            categoryTitle
-                            topicTags {
-                            name
-                            slug
+        with yaspin(text=f"Fetching problem                         https://leetcode.com/problem/{slug}", color="yellow") as spinner:
+            query_params = {
+                'operationName': "getQuestionDetail",
+                'variables': {'titleSlug': slug},
+                'query': '''query getQuestionDetail($titleSlug: String!) {
+                            question(titleSlug: $titleSlug) {
+                                questionId
+                                questionFrontendId
+                                questionTitle
+                                questionTitleSlug
+                                content
+                                difficulty
+                                stats
+                                similarQuestions
+                                categoryTitle
+                                topicTags {
+                                name
+                                slug
+                            }
                         }
-                    }
-                }'''
-        }
+                    }'''
+            }
 
-        resp = self.session.post(
-            "https://leetcode.com/graphql",
-            data=json.dumps(query_params).encode('utf8'),
-            headers={
-                "content-type": "application/json",
-            })
-        body = json.loads(resp.content)
+            resp = self.session.post(
+                "https://leetcode.com/graphql",
+                data=json.dumps(query_params).encode('utf8'),
+                headers={
+                    "content-type": "application/json",
+                })
+            body = json.loads(resp.content)
 
-        # parse data
-        question = get(body, 'data.question')
+            # parse data
+            question = get(body, 'data.question')
 
-        Problem.replace(
-            id=question['questionId'],
-            display_id=question['questionFrontendId'], 
-            title=question["questionTitle"],
-            level=question["difficulty"], 
-            slug=slug, 
-            description=question['content'],
-            accepted=accepted
-        ).execute()
+            Problem.replace(
+                id=question['questionId'],
+                display_id=question['questionFrontendId'], 
+                title=question["questionTitle"],
+                level=question["difficulty"], 
+                slug=slug, 
+                description=question['content'],
+                accepted=accepted
+            ).execute()
 
-        for item in question['topicTags']:
-            if Tag.get_or_none(Tag.slug == item['slug']) is None:
-                Tag.replace(
-                    name=item['name'],
-                    slug=item['slug']
+            for item in question['topicTags']:
+                if Tag.get_or_none(Tag.slug == item['slug']) is None:
+                    Tag.replace(
+                        name=item['name'],
+                        slug=item['slug']
+                    ).execute()
+
+                ProblemTag.replace(
+                    problem=question['questionId'],
+                    tag=item['slug']
                 ).execute()
 
-            ProblemTag.replace(
-                problem=question['questionId'],
-                tag=item['slug']
-            ).execute()
-        random_wait(10, 15)
+
+            spinner.spinner = Spinners.dots5
+            spinner.color = "green"
+
+            # Don't remove this. LeetCode's backend API will lock you out if you
+            # make too many requests too quickly.
+            random_wait(10, 15)
+            spinner.green.ok("✓")
+        
 
     def fetch_solution(self, slug):
-        print(f"🤖 Fetching solution for problem: {slug}")
-        query_params = {
-            "operationName": "QuestionNote",
-            "variables": {"titleSlug": slug},
-            "query": '''
-            query QuestionNote($titleSlug: String!) {
-                question(titleSlug: $titleSlug) {
-                    questionId
-                    article
-                    solution {
-                      id
-                      content
-                      contentTypeId
-                      canSeeDetail
-                      paidOnly
-                      rating {
+        with yaspin(text=f"Fetching solution                        https://leetcode.com/problem/{slug}", color="yellow") as spinner:
+            query_params = {
+                "operationName": "QuestionNote",
+                "variables": {"titleSlug": slug},
+                "query": '''
+                query QuestionNote($titleSlug: String!) {
+                    question(titleSlug: $titleSlug) {
+                        questionId
+                        article
+                        solution {
                         id
-                        count
-                        average
-                        userRating {
-                          score
-                          __typename
+                        content
+                        contentTypeId
+                        canSeeDetail
+                        paidOnly
+                        rating {
+                            id
+                            count
+                            average
+                            userRating {
+                            score
+                            __typename
+                            }
+                            __typename
                         }
                         __typename
-                      }
-                      __typename
+                        }
+                        __typename
                     }
-                    __typename
                 }
+                '''
             }
-            '''
-        }
-        resp = self.session.post("https://leetcode.com/graphql",
-                                 data=json.dumps(query_params).encode('utf8'),
-                                 headers={
-                                     "content-type": "application/json",
-                                 })
-        body = json.loads(resp.content)
+            resp = self.session.post("https://leetcode.com/graphql",
+                                    data=json.dumps(query_params).encode('utf8'),
+                                    headers={
+                                        "content-type": "application/json",
+                                    })
+            body = json.loads(resp.content)
 
-        # parse data
-        solution = get(body, "data.question")
-        if solution['solution']['paidOnly'] is False:
-            Solution.replace(
-                problem=solution['questionId'],
-                url=f"https://leetcode.com/articles/{slug}/",
-                content=solution['solution']['content']
-            ).execute()
-        random_wait(10, 15)
+            # parse data
+            solution = get(body, "data.question")
+            if solution['solution']['paidOnly'] is False:
+                Solution.replace(
+                    problem=solution['questionId'],
+                    url=f"https://leetcode.com/articles/{slug}/",
+                    content=solution['solution']['content']
+                ).execute()
+            
+
+            spinner.spinner = Spinners.dots5
+            spinner.color = "green"
+
+            # Don't remove this. LeetCode's backend API will lock you out if you
+            # make too many requests too quickly.
+            random_wait(10, 15)
+            spinner.green.ok("✓")
 
     def fetch_submission(self, slug):
-        print(f"🤖 Fetching submission for problem: {slug}")
-        query_params = {
-            'operationName': "Submissions",
-            'variables': {"offset": 0, "limit": 20, "lastKey": '', "questionSlug": slug},
-            'query': '''query Submissions($offset: Int!, $limit: Int!, $lastKey: String, $questionSlug: String!) {
-                                        submissionList(offset: $offset, limit: $limit, lastKey: $lastKey, questionSlug: $questionSlug) {
-                                        lastKey
-                                        hasNext
-                                        submissions {
-                                            id
-                                            statusDisplay
-                                            lang
-                                            runtime
-                                            timestamp
-                                            url
-                                            isPending
+        with yaspin(text=f"Fetching successful submission[s]        https://leetcode.com/problem/{slug}", color="yellow") as spinner:
+            query_params = {
+                'operationName': "Submissions",
+                'variables': {"offset": 0, "limit": 20, "lastKey": '', "questionSlug": slug},
+                'query': '''query Submissions($offset: Int!, $limit: Int!, $lastKey: String, $questionSlug: String!) {
+                                            submissionList(offset: $offset, limit: $limit, lastKey: $lastKey, questionSlug: $questionSlug) {
+                                            lastKey
+                                            hasNext
+                                            submissions {
+                                                id
+                                                statusDisplay
+                                                lang
+                                                runtime
+                                                timestamp
+                                                url
+                                                isPending
+                                                __typename
+                                            }
                                             __typename
                                         }
-                                        __typename
-                                    }
-                                }'''
-        }
+                                    }'''
+            }
 
-        resp = self.session.post("https://leetcode.com/graphql",
-                                 data=json.dumps(query_params).encode('utf8'),
-                                 headers={
-                                     "content-type": "application/json",
-                                 })
-        body = json.loads(resp.content)
+            resp = self.session.post("https://leetcode.com/graphql",
+                                    data=json.dumps(query_params).encode('utf8'),
+                                    headers={
+                                        "content-type": "application/json",
+                                    })
+            body = json.loads(resp.content)
 
-        # parse data
-        submissions = get(body, "data.submissionList.submissions")
-        if len(submissions) > 0:
-            for sub in submissions:
-                if Submission.get_or_none(Submission.id == sub['id']) is not None:
-                    continue
+            # parse data
+            submissions = get(body, "data.submissionList.submissions")
+            if len(submissions) > 0:
+                for sub in submissions:
+                    if Submission.get_or_none(Submission.id == sub['id']) is not None:
+                        continue
 
-                if sub['statusDisplay'] == 'Accepted':
-                    url = sub['url']
-                    html = self.session.get(f'https://leetcode.com{url}').text
+                    if sub['statusDisplay'] == 'Accepted':
+                        url = sub['url']
+                        html = self.session.get(f'https://leetcode.com{url}').text
 
-                    pattern = re.compile(
-                        r'submissionCode: \'(?P<code>.*)\',\n  editCodeUrl', re.S
-                    )
+                        pattern = re.compile(
+                            r'submissionCode: \'(?P<code>.*)\',\n  editCodeUrl', re.S
+                        )
 
-                    matched = pattern.search(html)
-                    code = matched.groupdict().get('code') if matched else None
-                    if code:
-                        Submission.insert(
-                            id=sub['id'],
-                            slug=slug,
-                            language=sub['lang'],
-                            created=sub['timestamp'],
-                            source=code.encode('utf-8')
-                        ).execute()
-                    else:
-                        raise Exception(f"Cannot get submission code for problem: {slug}")
-        random_wait(10, 15)
+                        matched = pattern.search(html)
+                        code = matched.groupdict().get('code') if matched else None
+                        if code:
+                            Submission.insert(
+                                id=sub['id'],
+                                slug=slug,
+                                language=sub['lang'],
+                                created=sub['timestamp'],
+                                source=code.encode('utf-8')
+                            ).execute()
+                        else:
+                            raise Exception(f"Cannot get submission code for problem: {slug}")
+
+            spinner.spinner = Spinners.dots5
+            spinner.color = "green"
+
+            # Don't remove this. LeetCode's backend API will lock you out if you
+            # make too many requests too quickly.
+            random_wait(10, 15)
+
+            spinner.green.ok(text="✓")
 
 
 if __name__ == '__main__':
